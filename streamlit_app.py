@@ -7,7 +7,7 @@ import os
 # The `FASTAPI_URL` must be set as a secret on Streamlit Community Cloud.
 # This code will now crash if the environment variable is not found,
 # which prevents silent failures during deployment.
-FASTAPI_URL = os.getenv("FASTAPI_URL")
+FASTAPI_URL = os.getenv("https://environmental-monitoring-system-1.onrender.com/docs")
 
 # --- Page Configuration ---
 st.set_page_config(

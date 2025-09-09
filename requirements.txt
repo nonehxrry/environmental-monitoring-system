@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+pandas
+numpy
+scikit-learn
+statsmodels
+python-dotenv
+openai
+requests
+joblib
+pydantic
+streamlit

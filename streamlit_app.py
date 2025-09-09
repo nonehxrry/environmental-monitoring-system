@@ -5,8 +5,6 @@ import os
 
 # Set the URL of your deployed FastAPI backend.
 # The `FASTAPI_URL` must be set as a secret on Streamlit Community Cloud.
-# This code will now crash if the environment variable is not found,
-# which prevents silent failures during deployment.
 FASTAPI_URL = os.getenv("FASTAPI_URL")
 
 # --- Page Configuration ---
@@ -40,8 +38,9 @@ with st.sidebar:
         if user_query and location:
             payload = {"query": user_query, "location": location}
             try:
+                # Correct URL: calls the /chatbot endpoint directly
                 response = requests.post(f"{FASTAPI_URL}/chatbot", json=payload)
-                response.raise_for_status() # Raise HTTPError for bad responses (4xx or 5xx)
+                response.raise_for_status() 
                 st.write(response.json()["response"])
             except requests.exceptions.RequestException as e:
                 st.error(f"Error connecting to the backend API: {e}")
@@ -54,8 +53,9 @@ st.header("Real-time Data & Forecasts")
 if st.button("Refresh Dashboard"):
     try:
         with st.spinner('Fetching data from the backend...'):
+            # Correct URL: calls the /forecasts endpoint directly
             response = requests.get(f"{FASTAPI_URL}/forecasts")
-            response.raise_for_status() # Raise HTTPError for bad responses (4xx or 5xx)
+            response.raise_for_status()
             data = response.json()
         
         # Display current metrics
@@ -76,7 +76,7 @@ if st.button("Refresh Dashboard"):
             for anomaly in data['anomalies']:
                 aqi_level = anomaly.get('aqi', 0)
                 if aqi_level > 150:
-                    # Pass the location from the user input to the alert endpoint
+                    # Correct URL: calls the /alert endpoint directly
                     alert_response = requests.post(f"{FASTAPI_URL}/alert", json={"aqi_level": aqi_level, "location": location})
                     alert_response.raise_for_status()
                     st.info(f"**High AQI Alert:** {alert_response.json()['alert']}")
